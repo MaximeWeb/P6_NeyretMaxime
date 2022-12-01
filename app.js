@@ -1,9 +1,13 @@
+const http = require('http');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-
-const stuffRoutes = require('./routes/stuff');
+const dotenv = require('dotenv')
+const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
+
+
+
 
 
 
@@ -15,7 +19,9 @@ mongoose.connect('mongodb+srv://MaximeWeb:azerty91@cluster0.htxre6g.mongodb.net/
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+dotenv.config();
 
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,10 +31,12 @@ app.use((req, res, next) => {
 });
 
 
-app.use(express.json());
 
-app.use('/api/sauces', stuffRoutes);
+
+
 app.use('/api/auth', userRoutes);
+app.use('/api', sauceRoutes);
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
